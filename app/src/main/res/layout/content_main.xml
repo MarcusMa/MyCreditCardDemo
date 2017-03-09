@@ -11,23 +11,11 @@
     tools:context="com.unionpay.marcus.mycreditcarddemo.ui.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <ScrollView
+    <ListView
+        android:id="@+id/cardList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <include layout="@layout/card_fragment"/>
-            <include layout="@layout/card_fragment"/>
-            <include layout="@layout/card_fragment"/>
-            <include layout="@layout/card_fragment"/>
-            <include layout="@layout/card_fragment"/>
-
-        </LinearLayout>
-
-    </ScrollView>
+    </ListView>
 
 </RelativeLayout>

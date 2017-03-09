@@ -10,7 +10,7 @@ import org.json.JSONObject;
  * Created by marcus on 17/3/9.
  */
 
-public class CreditCard implements CreditCardInterface{
+public class CreditCard {
 
     private int bankLabel;
     private String cardNumber;
@@ -18,6 +18,7 @@ public class CreditCard implements CreditCardInterface{
     private float recentBill;
     private float totalLimit;
     private float leftLimit;
+    private boolean isSessionValid;
     private QueryInterface queryInterface;
 
     public static final CreditCard instacneCreditCardByJsonObject(JSONObject object){
@@ -45,6 +46,36 @@ public class CreditCard implements CreditCardInterface{
             default:
                 break;
         }
+        initOther();  // init other info using queryInterface
+    }
+
+    private void initOther(){
+        if(null!=queryInterface && queryInterface.isSessionValid()){
+            setSessionValid(true);
+            setBonus(Integer.valueOf(queryInterface.getBonus()));
+            setRecentBill(Float.valueOf(queryInterface.getRecentBill()));
+            setTotalLimit(Float.valueOf(queryInterface.getLimit()));
+            setLeftLimit(Float.valueOf(queryInterface.getLimit()));
+        }
+        else{
+            setSessionValid(false);
+        }
+    }
+
+    public boolean isSessionValid() {
+        return isSessionValid;
+    }
+
+    public void setSessionValid(boolean sessionValid) {
+        isSessionValid = sessionValid;
+    }
+
+    public int getBonus() {
+        return bonus;
+    }
+
+    public float getRecentBill() {
+        return recentBill;
     }
 
     public int getBankLabel() {
@@ -87,24 +118,4 @@ public class CreditCard implements CreditCardInterface{
         this.leftLimit = leftLimit;
     }
 
-
-    @Override
-    public boolean isSessionValid() {
-        return false;
-    }
-
-    @Override
-    public String queryRecentBill() {
-        return null;
-    }
-
-    @Override
-    public String queryBonus() {
-        return null;
-    }
-
-    @Override
-    public String queryLimit() {
-        return null;
-    }
 }

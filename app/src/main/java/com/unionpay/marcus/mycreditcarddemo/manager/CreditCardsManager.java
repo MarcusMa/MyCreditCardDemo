@@ -46,4 +46,20 @@ public class CreditCardsManager {
             }
         }
     }
+
+    public int getCount(){
+        if(null == cards){
+            return 0;
+        }else{
+            return cards.size();
+        }
+    }
+
+    public CreditCard getItem(int position){
+        if(null == cards || position >= cards.size() || position < 0){
+            return  null;
+        }
+        else
+            return cards.get(position);
+    }
 }

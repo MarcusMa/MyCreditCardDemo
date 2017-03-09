@@ -35,6 +35,7 @@
                     android:src="@mipmap/cmbchina_logo"/>
 
                 <TextView
+                    android:id="@+id/bank_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
@@ -45,6 +46,7 @@
                     android:layout_toEndOf="@+id/bank_logo" />
 
                 <TextView
+                    android:id="@+id/card_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#696969"
@@ -76,6 +78,7 @@
                         android:gravity="center"/>
 
                     <TextView
+                        android:id="@+id/recentBill"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
@@ -98,6 +101,7 @@
                         android:gravity="center"/>
 
                     <TextView
+                        android:id="@+id/bonus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
@@ -126,6 +130,7 @@
                         android:gravity="center"/>
 
                     <TextView
+                        android:id="@+id/leftLimit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
@@ -141,6 +146,7 @@
                         android:gravity="center"/>
 
                     <TextView
+                        android:id="@+id/totalLimit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="#4876FF"
