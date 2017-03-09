@@ -2,21 +2,36 @@ package com.unionpay.marcus.mycreditcarddemo.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.unionpay.marcus.mycreditcarddemo.R;
+import com.unionpay.marcus.mycreditcarddemo.basic.CreditCard;
+import com.unionpay.marcus.mycreditcarddemo.basic.CreditCardConstants;
 import com.unionpay.marcus.mycreditcarddemo.manager.CreditCardsManager;
+
+import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
     private Context mContext;
     private CreditCardsManager creditCardsManager;
+    private ListView mCardList;
+    private ListAdapter mCardListAdapter;
+    private LayoutInflater inflater;
     private static final int REQ_CODE_FOR_ADD_BANK_ACCOUNT = 1;
 
     @Override
@@ -26,7 +41,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mContext = this;
-
+        inflater = getLayoutInflater();
+        /** init view object **/
+        mCardList = (ListView) findViewById(R.id.cardList);
+        init();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +61,68 @@ public class MainActivity extends AppCompatActivity {
 
     private void init(){
         creditCardsManager = CreditCardsManager.getInstance();
+        mCardListAdapter = new BaseAdapter() {
+
+            @Override
+            public int getCount() {
+                return creditCardsManager.getCount();
+            }
+
+            @Override
+            public Object getItem(int position) {
+                return creditCardsManager.getItem(position);
+            }
+
+            @Override
+            public long getItemId(int position) {
+                return position;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                CreditCard card =  (CreditCard) getItem(position);
+                if(null == card){
+                    return null;
+                }
+
+                if(card.isSessionValid()){
+                    View item = inflater.inflate(R.layout.card_fragment, null);
+                    ImageView bankLogo = (ImageView)item.findViewById(R.id.bank_logo);
+                    TextView bankName = (TextView) item.findViewById(R.id.bank_name);
+                    TextView cardNumber = (TextView) item.findViewById(R.id.card_number);
+                    TextView recentBill = (TextView)item.findViewById(R.id.recentBill);
+                    TextView bonus = (TextView)item.findViewById(R.id.bonus);
+                    TextView letfLimit = (TextView) item.findViewById(R.id.leftLimit);
+                    TextView totalLimit = (TextView) item.findViewById(R.id.totalLimit);
+
+                    switch (card.getBankLabel()){
+                        case CreditCardConstants.BANK_LABEL_FOR_CMBCHINA:
+                            bankLogo.setImageResource(R.mipmap.cmbchina_logo);
+                            bankName.setText("招商银行");
+                            break;
+                        case CreditCardConstants.BANK_LABLE_FOR_BANKCOMM:
+                            bankLogo.setImageResource(R.mipmap.bankcomm_logo);
+                            bankName.setText("交通银行");
+                            break;
+                        default:
+                            bankLogo.setImageResource(R.mipmap.ic_launcher);
+                            bankName.setText("未知");
+                            break;
+                    }
+                    cardNumber.setText(card.getCardNumber());
+                    recentBill.setText(String.format("%.2f",card.getRecentBill()));
+                    bonus.setText(String.format("%d",card.getBonus()));
+                    letfLimit.setText(String.format("%.2f",card.getLeftLimit()));
+                    totalLimit.setText(String.format("%.2f",card.getLeftLimit()));
+                    return item;
+                }
+                else{
+                    return null;
+                }
+            }
+
+        };
+        mCardList.setAdapter(mCardListAdapter);
     }
 
     @Override
