@@ -12,10 +12,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.unionpay.marcus.mycreditcarddemo.R;
+import com.unionpay.marcus.mycreditcarddemo.manager.CreditCardsManager;
 
 public class MainActivity extends AppCompatActivity {
     private Context mContext;
+    private CreditCardsManager creditCardsManager;
     private static final int REQ_CODE_FOR_ADD_BANK_ACCOUNT = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
                         */
             }
         });
+    }
+
+    private void init(){
+        creditCardsManager = CreditCardsManager.getInstance();
     }
 
     @Override

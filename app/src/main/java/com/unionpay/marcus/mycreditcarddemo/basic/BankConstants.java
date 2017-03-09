@@ -10,4 +10,8 @@ public class BankConstants {
 
     public static final String BANK_LOGO_FOR_CMBBANK = "cmbchina_logo.png";
     public static final String BANK_LOGO_FOR_BANKCOMM = "bankcomm_logo.png";
+
+    public static final String KEY_CREDIT_CARDS = "creditCards";
+    public static final String KEY_CREDIT_CARD_NUMBER = "cardNumber";
+    public static final String KEY_CREDIT_CARD_BANK_TYPE = "bankType";
 }
