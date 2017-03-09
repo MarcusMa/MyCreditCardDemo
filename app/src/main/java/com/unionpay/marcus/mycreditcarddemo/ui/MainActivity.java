@@ -1,5 +1,7 @@
-package com.unionpay.marcus.mycreditcarddemo;
+package com.unionpay.marcus.mycreditcarddemo.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,21 +11,29 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+import com.unionpay.marcus.mycreditcarddemo.R;
 
+public class MainActivity extends AppCompatActivity {
+    private Context mContext;
+    private static final int REQ_CODE_FOR_ADD_BANK_ACCOUNT = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mContext = this;
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(mContext,AccountAdditionActivity.class);
+                ((MainActivity) mContext).startActivityForResult(intent,REQ_CODE_FOR_ADD_BANK_ACCOUNT);
+                /*
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                        */
             }
         });
     }
