@@ -1,7 +1,7 @@
 package com.unionpay.marcus.mycreditcarddemo.manager;
 
 import com.unionpay.marcus.mycreditcarddemo.AppConfig;
-import com.unionpay.marcus.mycreditcarddemo.basic.BankConstants;
+import com.unionpay.marcus.mycreditcarddemo.basic.CreditCardConstants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,12 +28,12 @@ public class SharedPreferenceHelper {
         if (AppConfig.isMock){
             try {
                 JSONObject obj = new JSONObject();
-                obj.put(BankConstants.KEY_CREDIT_CARD_BANK_TYPE,BankConstants.BANK_LABEL_FOR_CMBBANK);
-                obj.put(BankConstants.KEY_CREDIT_CARD_NUMBER,"6222 **** **** 1234");
+                obj.put(CreditCardConstants.KEY_CREDIT_CARD_BANK_TYPE, CreditCardConstants.BANK_LABEL_FOR_CMBCHINA);
+                obj.put(CreditCardConstants.KEY_CREDIT_CARD_NUMBER,"6222 **** **** 1234");
 
                 JSONObject obj2 = new JSONObject();
-                obj2.put(BankConstants.KEY_CREDIT_CARD_BANK_TYPE,BankConstants.BANK_LABLE_FOR_BANKCOMM);
-                obj2.put(BankConstants.KEY_CREDIT_CARD_NUMBER,"6222 **** **** 4079");
+                obj2.put(CreditCardConstants.KEY_CREDIT_CARD_BANK_TYPE, CreditCardConstants.BANK_LABLE_FOR_BANKCOMM);
+                obj2.put(CreditCardConstants.KEY_CREDIT_CARD_NUMBER,"6222 **** **** 4079");
 
                 JSONArray array = new JSONArray();
                 array.put(obj);

@@ -1,12 +1,16 @@
 package com.unionpay.marcus.mycreditcarddemo.basic;
 
+import com.unionpay.marcus.mycreditcarddemo.providers.QueryInterface;
+import com.unionpay.marcus.mycreditcarddemo.providers.bankcomm.QueryBankCommImpl;
+import com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.QueryCmbChinaImpl;
+
 import org.json.JSONObject;
 
 /**
  * Created by marcus on 17/3/9.
  */
 
-public class CreditCard {
+public class CreditCard implements CreditCardInterface{
 
     private int bankLabel;
     private String cardNumber;
@@ -14,12 +18,13 @@ public class CreditCard {
     private float recentBill;
     private float totalLimit;
     private float leftLimit;
+    private QueryInterface queryInterface;
 
     public static final CreditCard instacneCreditCardByJsonObject(JSONObject object){
-        if (null!=object && object.has(BankConstants.KEY_CREDIT_CARD_BANK_TYPE)
-                && object.has(BankConstants.KEY_CREDIT_CARD_NUMBER)){
-            int bankLabel = object.optInt(BankConstants.KEY_CREDIT_CARD_BANK_TYPE);
-            String cardNumber = object.optString(BankConstants.KEY_CREDIT_CARD_NUMBER);
+        if (null!=object && object.has(CreditCardConstants.KEY_CREDIT_CARD_BANK_TYPE)
+                && object.has(CreditCardConstants.KEY_CREDIT_CARD_NUMBER)){
+            int bankLabel = object.optInt(CreditCardConstants.KEY_CREDIT_CARD_BANK_TYPE);
+            String cardNumber = object.optString(CreditCardConstants.KEY_CREDIT_CARD_NUMBER);
             return new CreditCard(bankLabel,cardNumber);
         }
         else{
@@ -30,6 +35,16 @@ public class CreditCard {
     private CreditCard(int bankLabel,String cardNumber){
         setBankLabel(bankLabel);
         setCardNumber(cardNumber);
+        switch (bankLabel){
+            case CreditCardConstants.BANK_LABEL_FOR_CMBCHINA:
+                queryInterface = new QueryCmbChinaImpl();
+                break;
+            case CreditCardConstants.BANK_LABLE_FOR_BANKCOMM:
+                queryInterface = new QueryBankCommImpl();
+                break;
+            default:
+                break;
+        }
     }
 
     public int getBankLabel() {
@@ -48,16 +63,8 @@ public class CreditCard {
         this.cardNumber = cardNumber;
     }
 
-    public int getBonus() {
-        return bonus;
-    }
-
     public void setBonus(int bonus) {
         this.bonus = bonus;
-    }
-
-    public float getRecentBill() {
-        return recentBill;
     }
 
     public void setRecentBill(float recentBill) {
@@ -81,4 +88,23 @@ public class CreditCard {
     }
 
 
+    @Override
+    public boolean isSessionValid() {
+        return false;
+    }
+
+    @Override
+    public String queryRecentBill() {
+        return null;
+    }
+
+    @Override
+    public String queryBonus() {
+        return null;
+    }
+
+    @Override
+    public String queryLimit() {
+        return null;
+    }
 }
