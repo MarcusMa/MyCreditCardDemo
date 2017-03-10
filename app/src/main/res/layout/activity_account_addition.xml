@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_account_addition"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,14 +15,29 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <Button
+        <com.beardedhen.androidbootstrap.BootstrapButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="+ 招商银行"/>
-        <Button
+            android:layout_marginBottom="10dp"
+            android:text=" + 招商银行"
+            app:bootstrapBrand="primary"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:showOutline="true"
+            app:roundedCorners="true"
+            />
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="+ 交通银行"/>
+            android:text=" + 交通银行"
+            android:layout_marginBottom="10dp"
+            app:bootstrapBrand="primary"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:showOutline="true"
+            app:roundedCorners="true"
+            />
 
 
     </LinearLayout>

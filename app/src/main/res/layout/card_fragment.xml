@@ -59,6 +59,7 @@
                 android:layout_height="1dp"
                 android:background="#E8E8E8" />
             <LinearLayout
+                android:id="@+id/layout_card_detial_container"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:background="#F2F2F2"
@@ -161,6 +162,7 @@
                 android:layout_height="1dp"
                 android:background="#E8E8E8" />
             <LinearLayout
+                android:id="@+id/layout_bill_detial_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#F2F2F2"
@@ -173,6 +175,27 @@
                     android:text="账单详情"/>
 
             </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/layout_need_login_container"
+                android:layout_width="match_parent"
+                android:background="#F2F2F2"
+                android:layout_height="100dp">
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/needLoginBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="需要重新登录"
+                    app:bootstrapBrand="primary"
+                    app:bootstrapSize="lg"
+                    app:buttonMode="regular"
+                    app:showOutline="true"
+                    app:roundedCorners="true"
+                    />
+
+            </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

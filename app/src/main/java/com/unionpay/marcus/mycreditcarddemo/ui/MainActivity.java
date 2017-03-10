@@ -14,11 +14,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.unionpay.marcus.mycreditcarddemo.R;
 import com.unionpay.marcus.mycreditcarddemo.basic.CreditCard;
 import com.unionpay.marcus.mycreditcarddemo.basic.CreditCardConstants;
@@ -85,40 +89,63 @@ public class MainActivity extends AppCompatActivity {
                     return null;
                 }
 
-                if(card.isSessionValid()){
-                    View item = inflater.inflate(R.layout.card_fragment, null);
-                    ImageView bankLogo = (ImageView)item.findViewById(R.id.bank_logo);
-                    TextView bankName = (TextView) item.findViewById(R.id.bank_name);
-                    TextView cardNumber = (TextView) item.findViewById(R.id.card_number);
-                    TextView recentBill = (TextView)item.findViewById(R.id.recentBill);
-                    TextView bonus = (TextView)item.findViewById(R.id.bonus);
-                    TextView letfLimit = (TextView) item.findViewById(R.id.leftLimit);
-                    TextView totalLimit = (TextView) item.findViewById(R.id.totalLimit);
+                View item = inflater.inflate(R.layout.card_fragment, null);
+                ImageView bankLogo = (ImageView)item.findViewById(R.id.bank_logo);
+                TextView bankName = (TextView) item.findViewById(R.id.bank_name);
+                TextView cardNumber = (TextView) item.findViewById(R.id.card_number);
+                TextView recentBill = (TextView)item.findViewById(R.id.recentBill);
+                TextView bonus = (TextView)item.findViewById(R.id.bonus);
+                TextView letfLimit = (TextView) item.findViewById(R.id.leftLimit);
+                TextView totalLimit = (TextView) item.findViewById(R.id.totalLimit);
+                BootstrapButton needLoginBtn = (BootstrapButton) item.findViewById(R.id.needLoginBtn);
+                LinearLayout cardDetialContainer = (LinearLayout) item.findViewById(R.id.layout_card_detial_container);
+                LinearLayout billDetialContainer = (LinearLayout) item.findViewById(R.id.layout_bill_detial_container);
+                RelativeLayout needLoginContrainer = (RelativeLayout) item.findViewById(R.id.layout_need_login_container);
 
-                    switch (card.getBankLabel()){
-                        case CreditCardConstants.BANK_LABEL_FOR_CMBCHINA:
-                            bankLogo.setImageResource(R.mipmap.cmbchina_logo);
-                            bankName.setText("招商银行");
-                            break;
-                        case CreditCardConstants.BANK_LABLE_FOR_BANKCOMM:
-                            bankLogo.setImageResource(R.mipmap.bankcomm_logo);
-                            bankName.setText("交通银行");
-                            break;
-                        default:
-                            bankLogo.setImageResource(R.mipmap.ic_launcher);
-                            bankName.setText("未知");
-                            break;
-                    }
-                    cardNumber.setText(card.getCardNumber());
+                switch (card.getBankLabel()){
+                    case CreditCardConstants.BANK_LABEL_FOR_CMBCHINA:
+                        bankLogo.setImageResource(R.mipmap.cmbchina_logo);
+                        bankName.setText("招商银行");
+                        break;
+                    case CreditCardConstants.BANK_LABLE_FOR_BANKCOMM:
+                        bankLogo.setImageResource(R.mipmap.bankcomm_logo);
+                        bankName.setText("交通银行");
+                        break;
+                    default:
+                        bankLogo.setImageResource(R.mipmap.ic_launcher);
+                        bankName.setText("未知");
+                        break;
+                }
+                cardNumber.setText(card.getCardNumber());
+
+                if(card.isSessionValid()){
+                    // cookies 有效
+                    needLoginContrainer.setVisibility(View.GONE);
+                    cardDetialContainer.setVisibility(View.VISIBLE);
+                    billDetialContainer.setVisibility(View.VISIBLE);
                     recentBill.setText(String.format("%.2f",card.getRecentBill()));
                     bonus.setText(String.format("%d",card.getBonus()));
                     letfLimit.setText(String.format("%.2f",card.getLeftLimit()));
                     totalLimit.setText(String.format("%.2f",card.getLeftLimit()));
-                    return item;
                 }
                 else{
-                    return null;
+                    // cookies 无效
+                    needLoginContrainer.setVisibility(View.VISIBLE);
+                    cardDetialContainer.setVisibility(View.GONE);
+                    billDetialContainer.setVisibility(View.GONE);
+                    needLoginBtn.setTag(card);
+                    needLoginBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (v.getId() == R.id.needLoginBtn){
+                                CreditCard card = (CreditCard) v.getTag();
+                                Snackbar.make(v, card.getCardNumber() , Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
+                            }
+                        }
+                    });
                 }
+                return item;
             }
 
         };

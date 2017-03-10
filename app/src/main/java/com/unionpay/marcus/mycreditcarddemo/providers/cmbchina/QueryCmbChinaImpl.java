@@ -11,7 +11,7 @@ public class QueryCmbChinaImpl implements QueryInterface {
     @Override
     public boolean isSessionValid() {
         if(AppConfig.isMock){
-            return true;
+            return false;
         }
         // TODO
         return false;
