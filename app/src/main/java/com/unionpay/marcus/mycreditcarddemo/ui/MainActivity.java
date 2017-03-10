@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private ListAdapter mCardListAdapter;
     private LayoutInflater inflater;
     private static final int REQ_CODE_FOR_ADD_BANK_ACCOUNT = 1;
+    private RelativeLayout mMainContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
         inflater = getLayoutInflater();
         /** init view object **/
+        mMainContainer = (RelativeLayout) findViewById(R.id.content_main);
         mCardList = (ListView) findViewById(R.id.cardList);
         init();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -172,5 +174,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQ_CODE_FOR_ADD_BANK_ACCOUNT && resultCode == RESULT_OK){
+            // refresh list
+            // TODO
+            Snackbar.make(mMainContainer, "need refresh list" , Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 }
