@@ -1,5 +1,8 @@
 package com.unionpay.marcus.mycreditcarddemo.manager;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.unionpay.marcus.mycreditcarddemo.AppConfig;
 import com.unionpay.marcus.mycreditcarddemo.basic.CreditCardConstants;
 
@@ -13,17 +16,19 @@ import org.json.JSONObject;
 
 public class SharedPreferenceHelper {
     private static SharedPreferenceHelper instance;
-    public static SharedPreferenceHelper getInstance() {
+    private static final String SHARED_PREFERENCE_KEY = "MyCreditCards";
+    private SharedPreferences sharedPreferences;
+    public static SharedPreferenceHelper getInstance(Context context) {
         if(null == instance){
-            instance = new SharedPreferenceHelper();
+            instance = new SharedPreferenceHelper(context);
         }
         return instance ;
     }
 
-    private SharedPreferenceHelper(){
-        //TODO init shareperferencehelper
+    private SharedPreferenceHelper(Context context){
+        sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCE_KEY, Context.MODE_PRIVATE);
     }
-    
+
     public static final JSONArray getLocalCreditCardList(){
         if (AppConfig.isMock){
             try {
@@ -53,5 +58,14 @@ public class SharedPreferenceHelper {
     public static void saveCreditCard(){
         //TODO save a card info to sharepreference
     }
-    
+
+    public String getString(String key){
+        return sharedPreferences.getString(key, "");
+    }
+
+    public void saveString(String key, String value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();//获取编辑器
+        editor.putString(key,value);
+        editor.commit();//提交修改
+    }
 }

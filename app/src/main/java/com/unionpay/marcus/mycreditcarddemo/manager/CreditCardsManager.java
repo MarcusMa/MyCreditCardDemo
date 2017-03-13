@@ -26,7 +26,7 @@ public class CreditCardsManager {
 
     private  CreditCardsManager(){
         // TODO init
-        sharedperferencehelper = SharedPreferenceHelper.getInstance();
+        // sharedperferencehelper = SharedPreferenceHelper.getInstance();
         init();
     }
 
