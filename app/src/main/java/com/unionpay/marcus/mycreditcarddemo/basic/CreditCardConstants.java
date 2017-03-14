@@ -14,4 +14,5 @@ public class CreditCardConstants {
     public static final String KEY_CREDIT_CARDS = "creditCards";
     public static final String KEY_CREDIT_CARD_NUMBER = "cardNumber";
     public static final String KEY_CREDIT_CARD_BANK_TYPE = "bankType";
+    public static final String KEY_CREDIT_CARD_USER_NAME = "userName";
 }

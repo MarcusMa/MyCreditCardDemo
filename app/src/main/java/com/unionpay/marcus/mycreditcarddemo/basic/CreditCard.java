@@ -14,6 +14,7 @@ public class CreditCard {
 
     private int bankLabel;
     private String cardNumber;
+    private String name;
     private int bonus;
     private float recentBill;
     private float totalLimit;
@@ -60,6 +61,14 @@ public class CreditCard {
         else{
             setSessionValid(false);
         }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean isSessionValid() {

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_cmb_china_login"
     android:layout_width="match_parent"
@@ -9,107 +8,112 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.CmbChinaLoginActivity">
+    android:orientation="vertical">
 
-    <TableRow
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        >
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="信用卡号: "
-            />
-
-        <com.beardedhen.androidbootstrap.BootstrapEditText
-            android:id="@+id/user_card_num"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            app:bootstrapSize="md"
-            app:bootstrapBrand="info"
-            android:layout_span="2"
-            />
-
-    </TableRow>
-
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        >
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="查询密码: "
-            />
-
-        <com.beardedhen.androidbootstrap.BootstrapEditText
-            android:id="@+id/user_password"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            app:bootstrapSize="md"
-            app:bootstrapBrand="info"
-            android:layout_span="2"
-            />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        >
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="验 证 码: "
-            />
-
-        <com.beardedhen.androidbootstrap.BootstrapEditText
-            android:id="@+id/user_valid_code"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            app:bootstrapSize="md"
-            app:bootstrapBrand="info"
-            />
-
-        <ImageView
-            android:id="@+id/image_valid_code"
-            android:layout_width="100dp"
-            android:layout_height="20dp"
-            android:src="@mipmap/ic_launcher"
-            android:layout_gravity="center"
-            />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_margin="10dp"
-        >
-
-        <com.beardedhen.androidbootstrap.BootstrapButton
-            android:id="@+id/loginCmbChinaBtn"
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_span="3"
-            android:text="登 录"
-            app:bootstrapBrand="primary"
-            app:bootstrapSize="lg"
-            app:buttonMode="regular"
-            app:showOutline="false"
-            app:roundedCorners="true"
-            />
+            android:layout_margin="10dp"
+            android:gravity="center"
+            >
 
-    </TableRow>
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="身份证号: "
+                />
 
-</TableLayout>
+            <com.beardedhen.androidbootstrap.BootstrapEditText
+                android:id="@+id/user_card_num"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                app:bootstrapSize="md"
+                app:bootstrapBrand="info"
+                android:layout_span="2"
+                android:inputType="number" />
+
+        </TableRow>
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="查询密码: "
+                />
+
+            <com.beardedhen.androidbootstrap.BootstrapEditText
+                android:id="@+id/user_password"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                app:bootstrapSize="md"
+                app:bootstrapBrand="info"
+                android:layout_span="2"
+                android:inputType="numberPassword" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="验 证 码: "
+                />
+
+            <com.beardedhen.androidbootstrap.BootstrapEditText
+                android:id="@+id/user_valid_code"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                app:bootstrapSize="md"
+                app:bootstrapBrand="info"
+                />
+
+            <ImageView
+                android:id="@+id/image_valid_code"
+                android:layout_width="100dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/ic_launcher"
+                android:layout_gravity="center"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            >
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/loginCmbChinaBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_span="3"
+                android:text="登 录"
+                app:bootstrapBrand="primary"
+                app:bootstrapSize="lg"
+                app:buttonMode="regular"
+                app:showOutline="false"
+                app:roundedCorners="true"
+                />
+
+        </TableRow>
+
+    </TableLayout>
+</LinearLayout>

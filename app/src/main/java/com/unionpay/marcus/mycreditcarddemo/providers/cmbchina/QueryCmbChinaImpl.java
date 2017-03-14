@@ -18,6 +18,7 @@ public class QueryCmbChinaImpl implements QueryInterface {
     public static final String CMBCHINA_GET_TOTAL_BILL = "getTotalBill.do";
     public static final String CMBCHINA_QUERY_LIMIT_BY_SESSION = "queryLimitBySession.do";
     public static final String CMBCHINA_QUERY_BONUS_BY_SESSION = "queryBonusBySession.do";
+    public static final String CMBCHINA_QUERY_CARD_LIMIT = "queryCardLimit.do";
     public static final String CMBCHINA_SESSION_SESS = "session.sess";
     public static final String CMBCHINA_LOGIN = "login.do";
     public static final String CMBCHINA_VALID_CODE = "captcha.code";

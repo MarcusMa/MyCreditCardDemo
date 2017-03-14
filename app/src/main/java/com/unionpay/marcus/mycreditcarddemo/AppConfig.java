@@ -6,5 +6,5 @@ package com.unionpay.marcus.mycreditcarddemo;
 
 public class AppConfig {
     public static final String SHARED_PERFERENCE_CARDS_LIST_LABEL = "CreditCards";
-    public static final boolean isMock = true;
+    public static final boolean isMock = false;
 }

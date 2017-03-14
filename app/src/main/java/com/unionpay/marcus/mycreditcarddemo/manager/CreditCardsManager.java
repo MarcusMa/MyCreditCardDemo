@@ -1,5 +1,7 @@
 package com.unionpay.marcus.mycreditcarddemo.manager;
 
+import android.content.Context;
+
 import com.unionpay.marcus.mycreditcarddemo.basic.CreditCard;
 
 import org.json.JSONArray;
@@ -16,22 +18,22 @@ public class CreditCardsManager {
     private static CreditCardsManager instance;
     private SharedPreferenceHelper sharedperferencehelper;
     private List<CreditCard> cards = new ArrayList<>();
+
     public static CreditCardsManager getInstance() {
-        if(null == instance)
-        {
+        if (null == instance) {
             instance = new CreditCardsManager();
         }
         return instance;
     }
 
-    private  CreditCardsManager(){
+    private CreditCardsManager() {
         // TODO init
-        // sharedperferencehelper = SharedPreferenceHelper.getInstance();
+        sharedperferencehelper = SharedPreferenceHelper.getInstance(null);
         init();
     }
 
-    private void init(){
-        if(null!= cards && cards.size()>0){
+    private void init() {
+        if (null != cards && cards.size() > 0) {
             cards.clear();
         }
         JSONArray cardjsonarray = sharedperferencehelper.getLocalCreditCardList();
@@ -40,26 +42,25 @@ public class CreditCardsManager {
             for (int i = len; i > 0; i--) {
                 JSONObject object = cardjsonarray.optJSONObject(len - i);
                 CreditCard card = CreditCard.instacneCreditCardByJsonObject(object);
-                if (null != card){
+                if (null != card) {
                     cards.add(card);
                 }
             }
         }
     }
 
-    public int getCount(){
-        if(null == cards){
+    public int getCount() {
+        if (null == cards) {
             return 0;
-        }else{
+        } else {
             return cards.size();
         }
     }
 
-    public CreditCard getItem(int position){
-        if(null == cards || position >= cards.size() || position < 0){
-            return  null;
-        }
-        else
+    public CreditCard getItem(int position) {
+        if (null == cards || position >= cards.size() || position < 0) {
+            return null;
+        } else
             return cards.get(position);
     }
 }

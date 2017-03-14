@@ -2,6 +2,7 @@ package com.unionpay.marcus.mycreditcarddemo.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.JsonReader;
 
 import com.unionpay.marcus.mycreditcarddemo.AppConfig;
 import com.unionpay.marcus.mycreditcarddemo.basic.CreditCardConstants;
@@ -9,6 +10,8 @@ import com.unionpay.marcus.mycreditcarddemo.basic.CreditCardConstants;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import static com.unionpay.marcus.mycreditcarddemo.basic.CreditCardConstants.KEY_CREDIT_CARDS;
 
 /**
  * Created by marcus on 17/3/9.
@@ -29,7 +32,7 @@ public class SharedPreferenceHelper {
         sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCE_KEY, Context.MODE_PRIVATE);
     }
 
-    public static final JSONArray getLocalCreditCardList(){
+    public JSONArray getLocalCreditCardList(){
         if (AppConfig.isMock){
             try {
                 JSONObject obj = new JSONObject();
@@ -50,13 +53,50 @@ public class SharedPreferenceHelper {
             }
         }
         else{
-            //FIXME donot use the mock data
+            String saveString = sharedPreferences.getString(KEY_CREDIT_CARDS,null);
+            if(null != saveString && !saveString.isEmpty()){
+                try{
+                    JSONArray array = new JSONArray(saveString);
+                    return array;
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
             return  null;
         }
     }
 
-    public static void saveCreditCard(){
+    public  void saveCreditCard(JSONArray array){
         //TODO save a card info to sharepreference
+        try{
+            JSONArray localArray = getLocalCreditCardList();
+            if(null != localArray){
+                for(int i = 0;i<array.length();i++){
+                    boolean isSame = false;
+                    JSONObject objI = localArray.getJSONObject(i);
+                    for(int j =0;j<localArray.length();j++){
+                        JSONObject objJ = array.getJSONObject(i);
+                        String localCardNum = objI.optString(CreditCardConstants.KEY_CREDIT_CARD_NUMBER);
+                        if(localCardNum != null && localCardNum.equalsIgnoreCase(objJ.optString(CreditCardConstants.KEY_CREDIT_CARD_NUMBER))) {
+                            isSame = true;
+                            break;
+                        }
+                    }
+                    if (isSame){
+                        localArray.put(objI);
+                    }
+                }
+            }else{
+                localArray = array;
+            }
+            String savaString = localArray.toString();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(KEY_CREDIT_CARDS,savaString);
+            editor.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public String getString(String key){

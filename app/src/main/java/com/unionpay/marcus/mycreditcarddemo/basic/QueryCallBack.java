@@ -5,6 +5,6 @@ package com.unionpay.marcus.mycreditcarddemo.basic;
  */
 
 public interface QueryCallBack {
-    void onSuccess(String actionName, String result);
+    void onResult(String actionName, String result);
     void onError(String actionName,String result);
 }

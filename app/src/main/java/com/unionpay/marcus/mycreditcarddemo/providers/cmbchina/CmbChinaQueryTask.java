@@ -78,6 +78,6 @@ public class CmbChinaQueryTask extends AsyncTask<String,Integer,String>{
     //onPostExecute方法用于在执行完后台任务后更新UI,显示结果
     @Override
     protected void onPostExecute(String result) {
-        queryCallBack.onSuccess(currentActionName,result);
+        queryCallBack.onResult(currentActionName,result);
     }
 }
