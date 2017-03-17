@@ -48,7 +48,9 @@ public class BankCommLoginActivity extends AppCompatActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Log.e("test", "shouldOverrideUrlLoading: " + url);
-                handler.sendEmptyMessage(MSG_LOGIN_SUCCESS);
+                if (url.contains("/home/index.html")){
+                    handler.sendEmptyMessage(MSG_LOGIN_SUCCESS);
+                }
                 // handler.sendEmptyMessage(MSG_HIDE_WEB_VIEW);
                 // handler.sendEmptyMessageDelayed(MSG_BANKCOMM_DO_BILLING_DETIAL_REQUEST,1000);
                 // handler.sendEmptyMessage(MSG_CMBCHINA_DO_ALL_REQUEST); // for cmbchina
@@ -91,31 +93,34 @@ public class BankCommLoginActivity extends AppCompatActivity {
                                 Document doc = Jsoup.parse(result);
 
                                 Element element = doc.select("span.name").first();
-                                String userName = element.text();
-                                Log.d(TAG,"userName:" + userName);
 
-                                JSONArray ourArray = new JSONArray();
-                                Element select = doc.select("select#mycard").first();
-                                Elements options = select.children();
-                                for(int i=0;i<options.size();i++){
-                                    Element tmpOption = options.get(i);
-                                    Log.d(TAG,"CardNo:" + tmpOption.attr("value"));
+                                if(null != element){
+                                    String userName = element.text();
+                                    Log.d(TAG,"userName:" + userName);
 
-                                    JSONObject newObj = new JSONObject();
-                                    try {
-                                        newObj.put(CreditCardConstants.KEY_CREDIT_CARD_USER_NAME,userName);
-                                        newObj.put(CreditCardConstants.KEY_CREDIT_CARD_BANK_TYPE,CreditCardConstants.BANK_LABLE_FOR_BANKCOMM);
-                                        newObj.put(CreditCardConstants.KEY_CREDIT_CARD_NUMBER,tmpOption.attr("value"));
-                                        ourArray.put(newObj);
+                                    JSONArray ourArray = new JSONArray();
+                                    Element select = doc.select("select#mycard").first();
+                                    Elements options = select.children();
+                                    for(int i=0;i<options.size();i++){
+                                        Element tmpOption = options.get(i);
+                                        Log.d(TAG,"CardNo:" + tmpOption.attr("value"));
 
-                                        if(ourArray.length()>0){
-                                            SharedPreferenceHelper.getInstance(getApplicationContext()).saveCreditCard(ourArray);
+                                        JSONObject newObj = new JSONObject();
+                                        try {
+                                            newObj.put(CreditCardConstants.KEY_CREDIT_CARD_USER_NAME,userName);
+                                            newObj.put(CreditCardConstants.KEY_CREDIT_CARD_BANK_TYPE,CreditCardConstants.BANK_LABLE_FOR_BANKCOMM);
+                                            newObj.put(CreditCardConstants.KEY_CREDIT_CARD_NUMBER,tmpOption.attr("value"));
+                                            ourArray.put(newObj);
+
+                                            if(ourArray.length()>0){
+                                                SharedPreferenceHelper.getInstance(getApplicationContext()).saveCreditCard(ourArray);
+                                            }
+
+                                            setResult(RESULT_OK);
+                                            finish();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
                                         }
-
-                                        setResult(RESULT_OK);
-                                        finish();
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
                                     }
                                 }
                             }

@@ -8,15 +8,14 @@ import android.view.View;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.unionpay.marcus.mycreditcarddemo.R;
-import com.unionpay.marcus.mycreditcarddemo.basic.InitCallBack;
 import com.unionpay.marcus.mycreditcarddemo.providers.bankcomm.BankCommLoginActivity;
 import com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.CmbChinaLoginActivity;
 
 public class AccountAdditionActivity extends AppCompatActivity implements View.OnClickListener{
     private BootstrapButton cmbChinaBtn,bankCommBtn;
     private Context mContext;
-    private static final int REQ_CMBCHINA_ACCOUNT = 1001;
-    private static final int RWQ_BANKCOMM_ACCOUNT = 1002;
+    public static final int REQ_CMBCHINA_ACCOUNT = 1001;
+    public static final int REQ_BANKCOMM_ACCOUNT = 1002;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,7 @@ public class AccountAdditionActivity extends AppCompatActivity implements View.O
     public void onClick(View v) {
         if(v.getId() == R.id.addBankCommBtn){
             Intent intent = new Intent(mContext, BankCommLoginActivity.class);
-            ((AccountAdditionActivity) mContext).startActivityForResult(intent, RWQ_BANKCOMM_ACCOUNT);
+            ((AccountAdditionActivity) mContext).startActivityForResult(intent, REQ_BANKCOMM_ACCOUNT);
         }
         else if(v.getId() == R.id.addCmbChinaBtn){
             Intent intent = new Intent(mContext, CmbChinaLoginActivity.class);

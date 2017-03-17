@@ -29,11 +29,16 @@ import com.unionpay.marcus.mycreditcarddemo.basic.CreditCard;
 import com.unionpay.marcus.mycreditcarddemo.basic.CreditCardConstants;
 import com.unionpay.marcus.mycreditcarddemo.basic.InitCallBack;
 import com.unionpay.marcus.mycreditcarddemo.manager.CreditCardsManager;
+import com.unionpay.marcus.mycreditcarddemo.providers.bankcomm.BankCommLoginActivity;
 import com.unionpay.marcus.mycreditcarddemo.providers.bankcomm.QueryBankCommImpl;
+import com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.CmbChinaLoginActivity;
 import com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.QueryCmbChinaImpl;
+import com.unionpay.marcus.mycreditcarddemo.service.KeepLiveService;
 
 import static com.unionpay.marcus.mycreditcarddemo.basic.CreditCardConstants.BANK_LABEL_FOR_CMBCHINA;
 import static com.unionpay.marcus.mycreditcarddemo.basic.CreditCardConstants.BANK_LABLE_FOR_BANKCOMM;
+import static com.unionpay.marcus.mycreditcarddemo.ui.AccountAdditionActivity.REQ_BANKCOMM_ACCOUNT;
+import static com.unionpay.marcus.mycreditcarddemo.ui.AccountAdditionActivity.REQ_CMBCHINA_ACCOUNT;
 
 public class MainActivity extends AppCompatActivity {
     private Context mContext;
@@ -134,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                     mLodingContainer.setVisibility(View.GONE);
                     mFab.setVisibility(View.VISIBLE);
                     initView();
+                    startKeepLiveService();
                     break;
                 case MSG_REFRESH_LIST:
                     creditCardsManager = CreditCardsManager.getInstance();
@@ -178,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 View item = inflater.inflate(R.layout.card_fragment, null);
-                ImageView bankLogo = (ImageView) item.findViewById(R.id.bank_logo);
+                final ImageView bankLogo = (ImageView) item.findViewById(R.id.bank_logo);
                 TextView bankName = (TextView) item.findViewById(R.id.bank_name);
                 TextView cardNumber = (TextView) item.findViewById(R.id.card_number);
                 TextView recentBill = (TextView) item.findViewById(R.id.recentBill);
@@ -226,8 +232,20 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             if (v.getId() == R.id.needLoginBtn) {
                                 CreditCard card = (CreditCard) v.getTag();
-                                Snackbar.make(v, card.getCardNumber(), Snackbar.LENGTH_LONG)
-                                        .setAction("Action", null).show();
+                                if(null!=card){
+                                    int bankType = card.getBankLabel();
+                                    if(bankType == BANK_LABEL_FOR_CMBCHINA){
+                                        Intent intent = new Intent(mContext, CmbChinaLoginActivity.class);
+                                        ((MainActivity) mContext).startActivityForResult(intent, REQ_CMBCHINA_ACCOUNT);
+                                    }
+                                    else if (bankType == BANK_LABLE_FOR_BANKCOMM){
+                                        Intent intent = new Intent(mContext, BankCommLoginActivity.class);
+                                        ((MainActivity) mContext).startActivityForResult(intent, REQ_BANKCOMM_ACCOUNT);
+                                    }
+                                }
+
+//                                Snackbar.make(v, card.getCardNumber(), Snackbar.LENGTH_LONG)
+//                                        .setAction("Action", null).show();
                             }
                         }
                     });
@@ -238,6 +256,37 @@ public class MainActivity extends AppCompatActivity {
         };
         mCardList.setAdapter(mCardListAdapter);
         // mCardListAdapter.();
+    }
+
+    private void startKeepLiveService(){
+        boolean isCmbChinaSessionValid = false;
+        boolean isBankCommSessionValid = false;
+        for(int i=0;i<creditCardsManager.getCount();i++){
+            CreditCard card = creditCardsManager.getItem(i);
+            if(null!=card){
+                if(BANK_LABEL_FOR_CMBCHINA == card.getBankLabel()&&card.isSessionValid()){
+                    isCmbChinaSessionValid = true;
+                }
+                if(BANK_LABLE_FOR_BANKCOMM == card.getBankLabel()&&card.isSessionValid()){
+                    isBankCommSessionValid = true;
+                }
+            }
+        }
+
+
+        Log.d("keepLiveService" , " bankcomm: " + String.valueOf(isBankCommSessionValid));
+        Log.d("keepLiveService"," cmbchina: " + String.valueOf(isCmbChinaSessionValid));
+
+        boolean[] bankTypes = new boolean[2];
+
+        bankTypes[0] = isCmbChinaSessionValid; // for cmbchina
+        bankTypes[1] = isBankCommSessionValid; // for bankcomm
+
+        Intent intent = new Intent(mContext, KeepLiveService.class);
+        intent.putExtra("bankTypes",bankTypes);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startService(intent);
+
     }
 
     @Override
@@ -256,6 +305,16 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            creditCardsManager.clear();
+            boolean[] bankTypes = new boolean[2];
+            bankTypes[0] = false; // for cmbchina
+            bankTypes[1] = false; // for bankcomm
+            Intent intent = new Intent(mContext, KeepLiveService.class);
+            intent.putExtra("bankTypes",bankTypes);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startService(intent);
+            handler.sendEmptyMessage(MSG_INIT_DATA_START);
             return true;
         }
 
@@ -265,13 +324,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_CODE_FOR_ADD_BANK_ACCOUNT && resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             // refresh list
             //
             handler.sendEmptyMessage(MSG_INIT_DATA_START);
 
             // handler.sendEmptyMessage(MSG_INIT_DATA_START);
-            Snackbar.make(mMainContainer, "need refresh list", Snackbar.LENGTH_LONG)
+            Snackbar.make(mMainContainer, "操作成功！", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
         }
     }

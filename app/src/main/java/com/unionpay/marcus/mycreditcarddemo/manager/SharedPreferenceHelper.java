@@ -33,37 +33,16 @@ public class SharedPreferenceHelper {
     }
 
     public JSONArray getLocalCreditCardList() {
-        if (AppConfig.isMock) {
+        String saveString = sharedPreferences.getString(KEY_CREDIT_CARDS, null);
+        if (null != saveString && !saveString.isEmpty()) {
             try {
-                JSONObject obj = new JSONObject();
-                obj.put(CreditCardConstants.KEY_CREDIT_CARD_BANK_TYPE, CreditCardConstants.BANK_LABEL_FOR_CMBCHINA);
-                obj.put(CreditCardConstants.KEY_CREDIT_CARD_NUMBER, "6222 **** **** 1234");
-
-                JSONObject obj2 = new JSONObject();
-                obj2.put(CreditCardConstants.KEY_CREDIT_CARD_BANK_TYPE, CreditCardConstants.BANK_LABLE_FOR_BANKCOMM);
-                obj2.put(CreditCardConstants.KEY_CREDIT_CARD_NUMBER, "6222 **** **** 4079");
-
-                JSONArray array = new JSONArray();
-                array.put(obj);
-                array.put(obj2);
+                JSONArray array = new JSONArray(saveString);
                 return array;
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
-                return null;
             }
-        } else {
-            String saveString = sharedPreferences.getString(KEY_CREDIT_CARDS, null);
-            if (null != saveString && !saveString.isEmpty()) {
-                try {
-                    JSONArray array = new JSONArray(saveString);
-                    return array;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return null;
         }
+        return null;
     }
 
     public void saveCreditCard(JSONArray array) {
@@ -91,7 +70,7 @@ public class SharedPreferenceHelper {
                 localArray = array;
             }
             String saveString = localArray.toString();
-            DataEngine.getInstance().setSharedPreferenceCache(saveString);
+            // DataEngine.getInstance().setSharedPreferenceCache(saveString);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(KEY_CREDIT_CARDS, saveString);
             editor.commit();

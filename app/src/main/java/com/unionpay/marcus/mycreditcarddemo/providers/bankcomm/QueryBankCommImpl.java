@@ -39,6 +39,8 @@ public class QueryBankCommImpl implements QueryInterface {
     public static final String ACTION_HOME_INDEX_ITEM = "member/member/home/index_item.html";
     public static final String ACTION_BANKCOMM_LIMIT_QRY = "member/member/limit/info.json";
 
+    public static final String KEEP_LIVE_URL = BANKCOMM_BASIC_URL + ACTION_BANKCOMM_BILLING_DETIAL;
+
     private static Map<String, String> resultMap = new HashMap<>();
 
     @Override

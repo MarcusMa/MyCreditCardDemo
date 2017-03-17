@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.unionpay.marcus.mycreditcarddemo">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -25,8 +26,13 @@
             android:label="@string/title_add_new_account" />
         <activity
             android:name=".providers.cmbchina.CmbChinaLoginActivity"
-            android:label="@string/title_cmbchina_account"></activity>
-        <activity android:name=".providers.bankcomm.BankCommLoginActivity"></activity>
+            android:label="@string/title_cmbchina_account" />
+        <activity android:name=".providers.bankcomm.BankCommLoginActivity" />
+
+        <service
+            android:name=".service.KeepLiveService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>

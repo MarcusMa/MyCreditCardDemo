@@ -176,9 +176,9 @@ public class CmbChinaLoginActivity extends AppCompatActivity implements View.OnC
                                     SharedPreferenceHelper.getInstance(getApplicationContext()).saveCreditCard(ourArray);
                                 }
 
-                                String data = DataEngine.getInstance().getSharedPreferenceCache();
+                                // String data = DataEngine.getInstance().getSharedPreferenceCache();
                                 Intent intent = new Intent();
-                                intent.putExtra("new_cards_list",data);
+                                //intent.putExtra("new_cards_list",data);
                                 setResult(RESULT_OK,intent);
                                 finish();
                                 break;
