@@ -5,6 +5,7 @@ import android.content.Context;
 import android.webkit.CookieSyncManager;
 
 import com.beardedhen.androidbootstrap.TypefaceProvider;
+import com.unionpay.marcus.mycreditcarddemo.basic.CrashHandler;
 import com.unionpay.marcus.mycreditcarddemo.manager.SharedPreferenceHelper;
 
 /**
@@ -20,5 +21,7 @@ public class CCApplication extends Application {
         CookieSyncManager.createInstance(getApplicationContext());
         mContext = getApplicationContext();
         sharedperferencehelper = SharedPreferenceHelper.getInstance(getApplicationContext());
+        CrashHandler crashHandler = CrashHandler.getInstance();
+        crashHandler.init(getApplicationContext());
     }
 }

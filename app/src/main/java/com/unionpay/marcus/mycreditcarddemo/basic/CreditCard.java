@@ -4,6 +4,7 @@ import com.unionpay.marcus.mycreditcarddemo.providers.QueryInterface;
 import com.unionpay.marcus.mycreditcarddemo.providers.bankcomm.QueryBankCommImpl;
 import com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.QueryCmbChinaImpl;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -14,7 +15,7 @@ public class CreditCard {
 
     private int bankLabel;
     private String cardNumber;
-    private String name;
+    private String userName;
     private int bonus;
     private float recentBill;
     private float totalLimit;
@@ -27,16 +28,18 @@ public class CreditCard {
                 && object.has(CreditCardConstants.KEY_CREDIT_CARD_NUMBER)){
             int bankLabel = object.optInt(CreditCardConstants.KEY_CREDIT_CARD_BANK_TYPE);
             String cardNumber = object.optString(CreditCardConstants.KEY_CREDIT_CARD_NUMBER);
-            return new CreditCard(bankLabel,cardNumber);
+            String userName = object.optString(CreditCardConstants.KEY_CREDIT_CARD_USER_NAME);
+            return new CreditCard(bankLabel,cardNumber,userName);
         }
         else{
             return null;
         }
     }
 
-    private CreditCard(int bankLabel,String cardNumber){
+    private CreditCard(int bankLabel,String cardNumber,String userName){
         setBankLabel(bankLabel);
         setCardNumber(cardNumber);
+        setUserName(userName);
         switch (bankLabel){
             case CreditCardConstants.BANK_LABEL_FOR_CMBCHINA:
                 queryInterface = new QueryCmbChinaImpl();
@@ -63,12 +66,12 @@ public class CreditCard {
         }
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public boolean isSessionValid() {
@@ -99,6 +102,15 @@ public class CreditCard {
         return cardNumber;
     }
 
+    public String getFormatedCardNumber(){
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(userName);
+        buffer.append(" [尾号 ");
+        buffer.append(cardNumber.substring(cardNumber.length()-4,cardNumber.length()));
+        buffer.append(" ]");
+        return buffer.toString();
+    }
+
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
@@ -125,6 +137,25 @@ public class CreditCard {
 
     public void setLeftLimit(float leftLimit) {
         this.leftLimit = leftLimit;
+    }
+
+    public String getFormatedBonus(){
+        if(bonus<0){
+            return "无";
+        }
+        else{
+            return String.format("%d", bonus);
+        }
+    }
+
+    public void initData(InitCallBack initCallBack){
+        try {
+            queryInterface.initData(this,initCallBack);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 }

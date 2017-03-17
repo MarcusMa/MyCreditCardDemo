@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_bank_comm_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.unionpay.marcus.mycreditcarddemo.providers.bankcomm.BankCommLoginActivity">
+
+    <WebView
+        android:id="@+id/bank_comm_webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </WebView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="处理中..."
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

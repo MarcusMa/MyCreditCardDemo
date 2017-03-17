@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 
 import com.unionpay.marcus.mycreditcarddemo.tools.IOUtils;
 
@@ -28,7 +27,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.security.auth.x500.X500Principal;
 
-import static com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.QueryCmbChinaImpl.CMBCHINA_VALID_CODE;
+import static com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.QueryCmbChinaImpl.ACTION_CMBCHINA_VALID_CODE;
 
 /**
  * Created by marcus on 17/3/10.
@@ -106,7 +105,7 @@ public class HttpRequestManager {
             InputStream inputStream = conn.getInputStream();
 
             /** for cmbchina to get the valid code **/
-            if (url.contains(CMBCHINA_VALID_CODE)){
+            if (url.contains(ACTION_CMBCHINA_VALID_CODE)){
                 Bitmap codePic = BitmapFactory.decodeStream(inputStream);
                 DataEngine.getInstance().setValidCodeBitmap(codePic);
             }

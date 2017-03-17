@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="androidbootstrap-2.3.1">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.beardedhen/androidbootstrap/2.3.1/jars/classes.jar!/" />
-      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.beardedhen/androidbootstrap/2.3.1/res" />
+      <root url="file://$USER_HOME$/.android/build-cache/97ed9f40b8a9ec296ca1c2e5ac798e6e21e56a0e/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/97ed9f40b8a9ec296ca1c2e5ac798e6e21e56a0e/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

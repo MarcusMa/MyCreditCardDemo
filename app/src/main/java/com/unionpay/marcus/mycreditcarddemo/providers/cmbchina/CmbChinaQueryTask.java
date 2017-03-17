@@ -41,13 +41,13 @@ public class CmbChinaQueryTask extends AsyncTask<String,Integer,String>{
         String method = "POST";
         try {
             obj.put("actionName",currentActionName);
-            if(QueryCmbChinaImpl.CMBCHINA_SESSION_SESS.equalsIgnoreCase(currentActionName)){
+            if(QueryCmbChinaImpl.ACTION_CMBCHINA_SESSION_SESS.equalsIgnoreCase(currentActionName)){
                 obj.put("idNo",params[1]);
                 obj.put("idType","0");
                 obj.put("x_caller",".0");
                 obj.put("x_mchannel","webapp");
                 obj.put("x_traceid","webapp");
-            }else if(QueryCmbChinaImpl.CMBCHINA_LOGIN.equalsIgnoreCase(currentActionName)){
+            }else if(QueryCmbChinaImpl.ACTION_CMBCHINA_LOGIN.equalsIgnoreCase(currentActionName)){
                 obj.put("encodedStr","");
                 obj.put("loginType","0");
                 obj.put("pin",params[1]);
@@ -58,11 +58,10 @@ public class CmbChinaQueryTask extends AsyncTask<String,Integer,String>{
                 obj.put("x_mchannel","webapp");
                 obj.put("x_traceid",params[4]);
             }
-            else if(QueryCmbChinaImpl.CMBCHINA_VALID_CODE.equalsIgnoreCase(currentActionName)){
+            else if(QueryCmbChinaImpl.ACTION_CMBCHINA_VALID_CODE.equalsIgnoreCase(currentActionName)){
                 method = "GET";
             }
             else{
-                obj.put("actionName",currentActionName);
                 obj.put("userSessionId", QueryCmbChinaImpl.getUserSessionId());
                 obj.put("x_caller", ".0");
                 obj.put("x_mchannel", "webapp");

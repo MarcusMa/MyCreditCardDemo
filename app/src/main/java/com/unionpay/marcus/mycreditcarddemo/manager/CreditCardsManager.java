@@ -1,10 +1,13 @@
 package com.unionpay.marcus.mycreditcarddemo.manager;
 
 import android.content.Context;
+import android.provider.ContactsContract;
+import android.text.TextUtils;
 
 import com.unionpay.marcus.mycreditcarddemo.basic.CreditCard;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ public class CreditCardsManager {
     private static CreditCardsManager instance;
     private SharedPreferenceHelper sharedperferencehelper;
     private List<CreditCard> cards = new ArrayList<>();
+    public int initEndCount;
 
     public static CreditCardsManager getInstance() {
         if (null == instance) {
@@ -32,11 +36,22 @@ public class CreditCardsManager {
         init();
     }
 
-    private void init() {
+    public void init() {
         if (null != cards && cards.size() > 0) {
             cards.clear();
         }
-        JSONArray cardjsonarray = sharedperferencehelper.getLocalCreditCardList();
+        JSONArray cardjsonarray = null;
+        if(!TextUtils.isEmpty(DataEngine.getInstance().getSharedPreferenceCache())){
+            try {
+                cardjsonarray = new JSONArray(DataEngine.getInstance().getSharedPreferenceCache());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            cardjsonarray = sharedperferencehelper.getLocalCreditCardList();
+        }
+
         if (null != cardjsonarray && cardjsonarray.length() > 0) {
             int len = cardjsonarray.length();
             for (int i = len; i > 0; i--) {

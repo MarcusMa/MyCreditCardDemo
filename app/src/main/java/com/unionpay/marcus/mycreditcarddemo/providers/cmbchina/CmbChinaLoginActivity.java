@@ -1,12 +1,12 @@
 package com.unionpay.marcus.mycreditcarddemo.providers.cmbchina;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.unionpay.marcus.mycreditcarddemo.R;
-import com.unionpay.marcus.mycreditcarddemo.basic.CreditCard;
 import com.unionpay.marcus.mycreditcarddemo.basic.CreditCardConstants;
 import com.unionpay.marcus.mycreditcarddemo.basic.QueryCallBack;
 import com.unionpay.marcus.mycreditcarddemo.manager.DataEngine;
@@ -32,11 +31,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.QueryCmbChinaImpl.CMBCHINA_BASIC_URL;
-import static com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.QueryCmbChinaImpl.CMBCHINA_LOGIN;
+import static com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.QueryCmbChinaImpl.ACTION_CMBCHINA_LOGIN;
 import static com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.QueryCmbChinaImpl.CMBCHINA_PUBLIC_KEY;
-import static com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.QueryCmbChinaImpl.CMBCHINA_QUERY_CARD_LIMIT;
-import static com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.QueryCmbChinaImpl.CMBCHINA_SESSION_SESS;
-import static com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.QueryCmbChinaImpl.CMBCHINA_VALID_CODE;
+import static com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.QueryCmbChinaImpl.ACTION_CMBCHINA_QUERY_CARD_LIMIT;
+import static com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.QueryCmbChinaImpl.ACTION_CMBCHINA_SESSION_SESS;
+import static com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.QueryCmbChinaImpl.ACTION_CMBCHINA_VALID_CODE;
 
 public class CmbChinaLoginActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String  TAG = "CmbChinaLoginActivity";
@@ -100,7 +99,7 @@ public class CmbChinaLoginActivity extends AppCompatActivity implements View.OnC
 
     private void updateValidCodeAction(){
         CmbChinaQueryTask task = new CmbChinaQueryTask(queryCallBack);
-        task.execute(QueryCmbChinaImpl.CMBCHINA_VALID_CODE);
+        task.execute(QueryCmbChinaImpl.ACTION_CMBCHINA_VALID_CODE);
     }
 
     private Handler handler = new Handler(){
@@ -113,23 +112,22 @@ public class CmbChinaLoginActivity extends AppCompatActivity implements View.OnC
                     break;
                 case MSG_CMBCHINA_SESSION_SESS:
                     CmbChinaQueryTask task4 = new CmbChinaQueryTask(queryCallBack);
-                    task4.execute(CMBCHINA_SESSION_SESS,enUserId);
+                    task4.execute(ACTION_CMBCHINA_SESSION_SESS,enUserId);
                     break;
                 case MSG_CMBCHINA_DO_LOGIN:
                     CmbChinaQueryTask task5 = new CmbChinaQueryTask(queryCallBack);
-                    task5.execute(CMBCHINA_LOGIN,enPassword,enUserId,mValidCode.getText().toString(),uuId);
+                    task5.execute(ACTION_CMBCHINA_LOGIN,enPassword,enUserId,mValidCode.getText().toString(),uuId);
                     break;
                 case MSG_CMBCHINA_QUERY_CARD_LIMIT:
                     CmbChinaQueryTask task6 = new CmbChinaQueryTask(queryCallBack);
-                    task6.execute(CMBCHINA_QUERY_CARD_LIMIT);
+                    task6.execute(ACTION_CMBCHINA_QUERY_CARD_LIMIT);
                 case MSG_LOGIN_SUCCESS:
-                    setResult(RESULT_OK);
-                    finish();
+
                     break;
                 default:
                     break;
             }
-            super.handleMessage(msg);
+            // super.handleMessage(msg);
         }
     };
 
@@ -137,7 +135,7 @@ public class CmbChinaLoginActivity extends AppCompatActivity implements View.OnC
         @Override
         public void onResult(String actionName, String result) {
             Log.i(TAG, "onPostExecute(Result result) called");
-            if (actionName == CMBCHINA_VALID_CODE) {
+            if (actionName == ACTION_CMBCHINA_VALID_CODE) {
                 handler.sendEmptyMessage(MSG_UPDATE_VALID_CODE_IMAGE);
             }
             else {
@@ -147,17 +145,19 @@ public class CmbChinaLoginActivity extends AppCompatActivity implements View.OnC
                     if ("1000".equalsIgnoreCase(respCode)) {
                         Message msg = Message.obtain();
                         switch ( actionName) {
-                            case CMBCHINA_SESSION_SESS:
+                            case ACTION_CMBCHINA_SESSION_SESS:
                                 uuId = json.getString("uuid");
                                 msg.what = MSG_CMBCHINA_DO_LOGIN;
+                                handler.sendMessage(msg);
                                 break;
-                            case CMBCHINA_LOGIN:
+                            case ACTION_CMBCHINA_LOGIN:
                                 // save sessionId
                                 String userSessionId = json.getString("userSessionId");
                                 saveUserSessionId(userSessionId);
                                 msg.what = MSG_CMBCHINA_QUERY_CARD_LIMIT;
+                                handler.sendMessage(msg);
                                 break;
-                            case CMBCHINA_QUERY_CARD_LIMIT:
+                            case ACTION_CMBCHINA_QUERY_CARD_LIMIT:
                                 JSONArray array = json.optJSONArray("data");
                                 JSONArray ourArray = new JSONArray();
                                 if (null != array){
@@ -175,12 +175,16 @@ public class CmbChinaLoginActivity extends AppCompatActivity implements View.OnC
                                 if(ourArray.length()>0){
                                     SharedPreferenceHelper.getInstance(getApplicationContext()).saveCreditCard(ourArray);
                                 }
-                                msg.what = MSG_LOGIN_SUCCESS;
+
+                                String data = DataEngine.getInstance().getSharedPreferenceCache();
+                                Intent intent = new Intent();
+                                intent.putExtra("new_cards_list",data);
+                                setResult(RESULT_OK,intent);
+                                finish();
                                 break;
                             default:
                                 break;
                         }
-                        handler.sendMessage(msg);
                     }
                     else{
                         Toast.makeText(mContext,json.optString("respMsg"),Toast.LENGTH_LONG).show();

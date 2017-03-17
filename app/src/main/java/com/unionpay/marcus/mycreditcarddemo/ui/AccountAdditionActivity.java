@@ -5,16 +5,19 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.unionpay.marcus.mycreditcarddemo.R;
+import com.unionpay.marcus.mycreditcarddemo.basic.InitCallBack;
+import com.unionpay.marcus.mycreditcarddemo.providers.bankcomm.BankCommLoginActivity;
 import com.unionpay.marcus.mycreditcarddemo.providers.cmbchina.CmbChinaLoginActivity;
 
 public class AccountAdditionActivity extends AppCompatActivity implements View.OnClickListener{
     private BootstrapButton cmbChinaBtn,bankCommBtn;
     private Context mContext;
-    private static  final int REQ_CODE = 1;
+    private static final int REQ_CMBCHINA_ACCOUNT = 1001;
+    private static final int RWQ_BANKCOMM_ACCOUNT = 1002;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,11 +32,12 @@ public class AccountAdditionActivity extends AppCompatActivity implements View.O
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.addBankCommBtn){
-
+            Intent intent = new Intent(mContext, BankCommLoginActivity.class);
+            ((AccountAdditionActivity) mContext).startActivityForResult(intent, RWQ_BANKCOMM_ACCOUNT);
         }
         else if(v.getId() == R.id.addCmbChinaBtn){
             Intent intent = new Intent(mContext, CmbChinaLoginActivity.class);
-            ((AccountAdditionActivity) mContext).startActivityForResult(intent,REQ_CODE);
+            ((AccountAdditionActivity) mContext).startActivityForResult(intent, REQ_CMBCHINA_ACCOUNT);
         }
         else
         {
@@ -44,8 +48,8 @@ public class AccountAdditionActivity extends AppCompatActivity implements View.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQ_CODE && resultCode == RESULT_OK){
-            setResult(RESULT_OK);
+        if(resultCode == RESULT_OK){
+            setResult(RESULT_OK,data);
             finish();
         }
     }

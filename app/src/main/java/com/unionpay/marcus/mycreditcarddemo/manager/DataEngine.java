@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 public class DataEngine {
     private static DataEngine instance;
     private Bitmap validCodeBitmap = null;
+    private String sharedPreferenceCache;
     public static DataEngine getInstance() {
         if(null == instance){
             instance = new DataEngine();
@@ -18,6 +19,14 @@ public class DataEngine {
 
     private DataEngine(){
 
+    }
+
+    public String getSharedPreferenceCache() {
+        return sharedPreferenceCache;
+    }
+
+    public void setSharedPreferenceCache(String sharedPreferenceCache) {
+        this.sharedPreferenceCache = sharedPreferenceCache;
     }
 
     public Bitmap getValidCodeBitmap() {
